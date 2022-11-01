@@ -9,6 +9,7 @@ public class Swinging : MonoBehaviour
     public Transform gunTip, cam, player;
     public LayerMask whatIsGrappleable;
     public PlayerMovement pm;
+    public PlayerCam pc;
 
     [Header("Swinging")]
     public float maxSwingDistance;
@@ -112,7 +113,7 @@ public class Swinging : MonoBehaviour
         joint.maxDistance = distanceFromPoint * 0.8f;
         joint.minDistance = distanceFromPoint * 0.25f;
 
-        // customize values as you like
+        // customize values if wanted
         joint.spring = 4.5f;
         joint.damper = 7f;
         joint.massScale = 4.5f;
@@ -128,6 +129,9 @@ public class Swinging : MonoBehaviour
         lr.positionCount = 0;
 
         Destroy(joint);
+
+        pc.DoFov(60f);
+        pc.DoTilt(0f);
     }
 
     private void OdmGearMovement()

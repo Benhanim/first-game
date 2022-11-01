@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Grappling : MonoBehaviour
     public Transform gunTip;
     public LayerMask whatIsGrappleable;
     public LineRenderer lr;
+    public PlayerCam pc;
 
     [Header("Grappling")]
     public float maxGrappleDistance;
@@ -102,5 +104,8 @@ public class Grappling : MonoBehaviour
         grapplingCdTimer = grapplingCd;
 
         lr.enabled = false;
+
+        pc.DoFov(60f);
+        pc.DoTilt(0f);
     }
 }

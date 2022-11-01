@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -50,6 +51,17 @@ public class PlayerMovement : MonoBehaviour
     public PlayerCam cam;
     public float grappleFov;
 
+    [Header("Go To Main Menu")]
+    public KeyCode mainMenuKey = KeyCode.M;
+
+    [Header("Checking Health")]
+    private PlayerUI pu;
+    public KeyCode loseHealth = KeyCode.J;
+    public KeyCode gainHealth = KeyCode.K;
+
+    [Header("Dash")]
+    public KeyCode useDash = KeyCode.R;
+
     public Transform orientation;
 
     float horizontalInput;
@@ -89,6 +101,8 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
 
         startYScale = transform.localScale.y;
+
+        pu = GetComponent<PlayerUI>();
     }
 
     private void Update()
@@ -139,6 +153,22 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        }
+
+        // main menu
+        if (Input.GetKey(mainMenuKey))
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        // checking health
+        if (Input.GetKeyDown(gainHealth))
+        {
+            pu.GainHealth();
+        }
+        else if (Input.GetKeyDown(loseHealth))
+        {
+            pu.LoseHealth();
         }
     }
 
