@@ -48,7 +48,7 @@ public class NormalEnemy : MonoBehaviour
 
             Rigidbody rb = cloneBullet.GetComponent<Rigidbody>();
 
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+            rb.AddForce(transform.forward * 100f, ForceMode.Impulse);
 
             Destroy(cloneBullet, timeToLive);
 

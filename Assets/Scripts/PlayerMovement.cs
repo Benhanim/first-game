@@ -54,10 +54,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Go To Main Menu")]
     public KeyCode mainMenuKey = KeyCode.M;
 
-    [Header("Checking Health")]
+    [Header("Player UI")]
     private PlayerUI pu;
-    public KeyCode loseHealth = KeyCode.J;
-    public KeyCode gainHealth = KeyCode.K;
 
     [Header("Dash")]
     public KeyCode useDash = KeyCode.R;
@@ -159,16 +157,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(mainMenuKey))
         {
             SceneManager.LoadScene("MainMenu");
-        }
-
-        // checking health
-        if (Input.GetKeyDown(gainHealth))
-        {
-            pu.GainHealth();
-        }
-        else if (Input.GetKeyDown(loseHealth))
-        {
-            pu.LoseHealth();
         }
     }
 

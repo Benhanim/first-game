@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PlayerUI : MonoBehaviour
@@ -17,9 +14,20 @@ public class PlayerUI : MonoBehaviour
         txt.text = "Health: " + health.ToString();
     }
 
-    public void LoseHealth()
+    public void LoseHealthSniper()
     {
-        health = health - 25;
+        health = health - health;
+        txt.text = "Health: " + health.ToString();
+
+        if (health <= 0)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
+
+    public void LoseHealthPistol()
+    {
+        health = health - 100;
         txt.text = "Health: " + health.ToString();
 
         if (health <= 0)

@@ -17,7 +17,7 @@ public class SniperEnemy : NormalEnemy
 
             Rigidbody rb = cloneBullet.GetComponent<Rigidbody>();
 
-            rb.AddForce(transform.forward * 64f, ForceMode.Impulse);
+            rb.AddForce(transform.forward * 550f, ForceMode.Impulse);
 
             Destroy(cloneBullet, timeToLive);
 
