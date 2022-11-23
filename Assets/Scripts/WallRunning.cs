@@ -77,14 +77,12 @@ public class WallRunning : MonoBehaviour
 
     private void StateMachine()
     {
-        // inputs
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
         upwardsRunning = Input.GetKey(upwardsRunKey);
         /*downwardsRunning = Input.GetKey(downwardsRunKey);*/
 
-        // wallrunning
         if ((wallLeft || wallRight) && verticalInput > 0 && AboveGround() && !exitingWall)
         {
             if (!pm.wallrunning)
@@ -101,7 +99,6 @@ public class WallRunning : MonoBehaviour
             if (Input.GetKeyDown(jumpKey))
                 WallJump();
         }
-        // exiting wallrunning
         else if (exitingWall)
         {
             if (pm.wallrunning)
@@ -127,7 +124,6 @@ public class WallRunning : MonoBehaviour
 
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        // camera effects
         cam.DoFov(90f);
         if (wallLeft)
             cam.DoTilt(-5f);
@@ -143,20 +139,16 @@ public class WallRunning : MonoBehaviour
 
         Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
 
-        // which direction player facing
         if ((orientation.forward - wallForward).magnitude > (orientation.forward - -wallForward).magnitude)
             wallForward = -wallForward;
 
-        // forward force
         rb.AddForce(wallForward * wallRunForce, ForceMode.Force);
 
-        // upwards/downwards force
         if (upwardsRunning)
             rb.velocity = new Vector3(rb.velocity.x, wallClimbSpeed, rb.velocity.z);
         /*else if (downwardsRunning)
             rb.velocity = new Vector3(rb.velocity.x, -wallClimbSpeed, rb.velocity.z);*/
 
-        // push to wall force
         if (!(wallLeft && horizontalInput > 0) && !(wallRight && horizontalInput < 0))
             rb.AddForce(-wallNormal * 100, ForceMode.Force);
 
@@ -168,14 +160,12 @@ public class WallRunning : MonoBehaviour
     {
         pm.wallrunning = false;
 
-        // reset camera
         cam.DoFov(60f);
         cam.DoTilt(0f);
     }
 
     private void WallJump()
     {
-        // enter exiting wall state
         exitingWall = true;
         exitWallTimer = exitWallTime;
 
@@ -183,7 +173,6 @@ public class WallRunning : MonoBehaviour
 
         Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
 
-        // reset y velocity and add force
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(forceToApply, ForceMode.Impulse);
     }

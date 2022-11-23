@@ -80,7 +80,8 @@ public class PlayerMovement : MonoBehaviour
         wallrunning,
         freeze,
         swinging,
-        air
+        air,
+        deflecting
     }
 
     private bool enableMovementOnNextTouch;
@@ -105,7 +106,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // ground check
         // grounded = Physics.CheckSphere(transform.position, playerHeight * 0.5f + 0.2f, whatIsGround);
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
@@ -113,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
         SpeedControl();
         StateHandler();
 
-        // handle drag
         if (grounded && !activeGrapple)
             rb.drag = groundDrag;
         else
@@ -130,7 +129,6 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        // when to jump
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
@@ -140,20 +138,17 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        // start crouch
         if (Input.GetKeyDown(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         }
 
-        // stop crouch
         if (Input.GetKeyUp(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         }
 
-        // main menu
         if (Input.GetKey(mainMenuKey))
         {
             SceneManager.LoadScene("MainMenu");
@@ -162,7 +157,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void StateHandler()
     {
-        // wallrunning
         if (freeze)
         {
             state = MovementState.freeze;
@@ -208,7 +202,6 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.air;
         }
 
-        // check if desiredMoveSpeed changed drastically
         if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 7f && moveSpeed != 0)
         {
             StopAllCoroutines();
@@ -224,7 +217,6 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator SmoothlyLerpMoveSpeed()
     {
-        // smoothly lerp movementSpeed to desired value
         float time = 0;
         float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
         float startValue = moveSpeed;
@@ -257,10 +249,8 @@ public class PlayerMovement : MonoBehaviour
         if (swinging)
             return;
 
-        // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // on slope
         if (OnSlope() && !exitingSlope)
         {
             rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
@@ -269,15 +259,12 @@ public class PlayerMovement : MonoBehaviour
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
 
-        // on ground
         else if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
-        // in air
         else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
-        // gravity off while on slope
         if (!wallrunning)
             rb.useGravity = !OnSlope();
     }
@@ -287,18 +274,15 @@ public class PlayerMovement : MonoBehaviour
         if (activeGrapple)
             return;
 
-        // limiting speed on slope
         if (OnSlope() && !exitingSlope)
         {
             if (rb.velocity.magnitude > moveSpeed)
                 rb.velocity = rb.velocity.normalized * moveSpeed;
         }
-        // limiting speed on ground or air
         else
         {
             Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-            // limit velocity if needed
             if (flatVel.magnitude > moveSpeed)
             {
                 Vector3 limitedVel = flatVel.normalized * moveSpeed;
@@ -311,7 +295,6 @@ public class PlayerMovement : MonoBehaviour
     {
         exitingSlope = true;
 
-        // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);

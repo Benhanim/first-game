@@ -12,7 +12,6 @@ public class SniperEnemy : NormalEnemy
 
         if (!alreadyAttacked)
         {
-            // instantiate prefab bullet - attack
             var cloneBullet = Instantiate(bullet, transform.position, Quaternion.identity);
 
             Rigidbody rb = cloneBullet.GetComponent<Rigidbody>();

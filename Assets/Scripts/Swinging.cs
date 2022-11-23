@@ -64,25 +64,18 @@ public class Swinging : MonoBehaviour
 
         Vector3 realHitPoint;
 
-        // Option 1 - Direct Hit
         if (raycastHit.point != Vector3.zero)
             realHitPoint = raycastHit.point;
-
-        // Option 2 - Indirect (predicted) Hit
         else if (sphereCastHit.point != Vector3.zero)
             realHitPoint = sphereCastHit.point;
-
-        // Option 3 - Miss
         else
             realHitPoint = Vector3.zero;
 
-        // realHitPoint found
         if (realHitPoint != Vector3.zero)
         {
             predictionPoint.gameObject.SetActive(true);
             predictionPoint.position = realHitPoint;
         }
-        // realHitPoint not found
         else
         {
             predictionPoint.gameObject.SetActive(false);
@@ -94,11 +87,9 @@ public class Swinging : MonoBehaviour
 
     private void StartSwing()
     {
-        // return if predictionHit not found
         if (predictionHit.point == Vector3.zero)
             return;
 
-        // deactivate active grapple
         if(GetComponent<Grappling>() != null)
             GetComponent<Grappling>().StopGrapple();
         pm.ResetRestrictions();
@@ -112,7 +103,6 @@ public class Swinging : MonoBehaviour
 
         float distanceFromPoint = Vector3.Distance(player.position, swingPoint);
 
-        // the distance grapple will try to keep from grapple point. 
         joint.maxDistance = distanceFromPoint * 0.8f;
         joint.minDistance = distanceFromPoint * 0.25f;
 
@@ -138,14 +128,12 @@ public class Swinging : MonoBehaviour
 
     private void OdmGearMovement()
     {
-        // right
         if (Input.GetKey(KeyCode.D)) rb.AddForce(orientation.right * horizontalThrustForce * Time.deltaTime);
-        // left
+
         if (Input.GetKey(KeyCode.A)) rb.AddForce(-orientation.right * horizontalThrustForce * Time.deltaTime);
-        // forward
+
         if (Input.GetKey(KeyCode.W)) rb.AddForce(orientation.forward * horizontalThrustForce * Time.deltaTime);
 
-        // shorten cable
         /* if (Input.GetKey(KeyCode.Space))
         {
             Vector3 directionToPoint = swingPoint - transform.position;
@@ -156,7 +144,7 @@ public class Swinging : MonoBehaviour
             joint.maxDistance = distanceFromPoint * 0.8f;
             joint.minDistance = distanceFromPoint * 0.25f;
         }
-        // extend cable
+
         if (Input.GetKey(KeyCode.S))
         {
             float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
@@ -169,7 +157,6 @@ public class Swinging : MonoBehaviour
 
     private void DrawRope()
     {
-        // if not grappling, don't draw rope
         if (!joint)
             return;
 

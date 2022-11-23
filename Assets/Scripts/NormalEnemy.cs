@@ -22,7 +22,6 @@ public class NormalEnemy : MonoBehaviour
 
     private void Update()
     {
-        // checking sight and attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
@@ -43,7 +42,6 @@ public class NormalEnemy : MonoBehaviour
 
         if (!alreadyAttacked)
         {
-            // instantiate prefab bullet - attack
             var cloneBullet = Instantiate(bullet, transform.position, Quaternion.identity);
 
             Rigidbody rb = cloneBullet.GetComponent<Rigidbody>();
