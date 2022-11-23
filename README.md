@@ -1,2 +1,2 @@
 # first-game
-mitad curso coder
+final curso coder
