@@ -56,26 +56,38 @@ public class Grappling : MonoBehaviour
 
         GetComponent<Swinging>().StopSwing();
 
-        grappling = true;
-
-        pm.freeze = true;
-
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
         {
+            grappling = true;
+
+            pm.freeze = true;
+
             grapplePoint = hit.point;
+
+            Debug.Log("hola");
 
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
         }
         else
         {
+            grappling = false;
+
+            pm.freeze = false;
+
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
 
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
 
-        lr.enabled = true;
-        lr.SetPosition(1, grapplePoint);
+        if (!grappling)
+            lr.enabled = false;
+        else if (grappling)
+        {
+            lr.enabled = true;
+            lr.SetPosition(1, grapplePoint);
+            Debug.Log("skere");
+        }
     }
 
     private void ExecuteGrapple()
