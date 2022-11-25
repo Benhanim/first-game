@@ -41,4 +41,10 @@ public class PlayerUI : MonoBehaviour
         health = health + 25;
         txt.text = "Health: " + health.ToString();
     }
+
+    public void Test()
+    {
+        health = health - 100;
+        txt.text = "Health: " + health.ToString();
+    }
 }

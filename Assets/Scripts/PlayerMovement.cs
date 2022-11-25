@@ -13,9 +13,15 @@ public class PlayerMovement : MonoBehaviour
     public float slideSpeed;
     public float wallrunSpeed;
     public float swingSpeed;
+    public float dashSpeed;
 
+    public float maxYSpeed;
+    private float speedChangeFactor;
+    public float dashSpeedChangeFactor;
     public float desiredMoveSpeed;
     public float lastDesiredMoveSpeed;
+    private MovementState lastState;
+    private bool keepMomentum;
 
     public float speedIncreaseMultiplier;
     public float slopeIncreaseMultiplier;
@@ -80,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
         wallrunning,
         freeze,
         swinging,
+        dashing,
         air,
         deflecting
     }
@@ -91,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
     public bool sliding;
     public bool grounded;
     public bool wallrunning;
+    public bool dashing;
 
     private void Start()
     {
@@ -106,14 +114,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // grounded = Physics.CheckSphere(transform.position, playerHeight * 0.5f + 0.2f, whatIsGround);
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.CheckSphere(transform.position, playerHeight * 0.5f + 0.2f, whatIsGround);
+        //grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();
         StateHandler();
 
-        if (grounded && !activeGrapple)
+        if (grounded && !activeGrapple && state == MovementState.walking || grounded && !activeGrapple && state == MovementState.sprinting || grounded && !activeGrapple && state == MovementState.crouching)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
@@ -157,7 +165,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void StateHandler()
     {
-        if (freeze)
+        if (dashing)
+        {
+            state = MovementState.dashing;
+            desiredMoveSpeed = dashSpeed;
+            speedChangeFactor = dashSpeedChangeFactor;
+        }
+        else if (freeze)
         {
             state = MovementState.freeze;
             moveSpeed = 0;
@@ -200,6 +214,11 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             state = MovementState.air;
+
+            if (desiredMoveSpeed < sprintSpeed)
+                desiredMoveSpeed = walkSpeed;
+            else
+                desiredMoveSpeed = sprintSpeed;
         }
 
         if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 7f && moveSpeed != 0)
@@ -212,7 +231,25 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = desiredMoveSpeed;
         }
 
+        bool desiredMoveSpeedHasCHanged = desiredMoveSpeed != lastDesiredMoveSpeed;
+        if (lastState == MovementState.dashing)
+            keepMomentum = true;
+
+        if (desiredMoveSpeedHasCHanged)
+        {
+            if (keepMomentum)
+            {
+                StopAllCoroutines();
+                StartCoroutine(SmoothlyLerpMoveSpeed());
+            }
+            else
+            {
+                moveSpeed = desiredMoveSpeed;
+            }
+        }
+
         lastDesiredMoveSpeed = desiredMoveSpeed;
+        lastState = state;
     }
 
     private IEnumerator SmoothlyLerpMoveSpeed()
@@ -247,6 +284,9 @@ public class PlayerMovement : MonoBehaviour
             return;
 
         if (swinging)
+            return;
+
+        if (state == MovementState.dashing)
             return;
 
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
@@ -289,6 +329,9 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
             }
         }
+
+        if (maxYSpeed != 0 && rb.velocity.y > maxYSpeed)
+            rb.velocity = new Vector3(rb.velocity.x, maxYSpeed, rb.velocity.z);
     }
 
     private void Jump()
