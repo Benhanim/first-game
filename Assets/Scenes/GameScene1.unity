@@ -1267,7 +1267,7 @@ MonoBehaviour:
   swingSpeed: 15
   dashSpeed: 20
   maxYSpeed: 0
-  dashSpeedChangeFactor: 80
+  dashSpeedChangeFactor: 50
   desiredMoveSpeed: 0
   lastDesiredMoveSpeed: 0
   speedIncreaseMultiplier: 1.5
@@ -1562,11 +1562,11 @@ MonoBehaviour:
   playerCam: {fileID: 963194228}
   dashForce: 20
   dashUpwardForce: 0
-  maxDashYSpeed: 15
+  maxDashYSpeed: 0
   dashDuration: 0.25
   cam: {fileID: 963194229}
   dashFov: 92.5
-  useCameraForward: 0
+  useCameraForward: 1
   allowAllDirections: 1
   disableGravity: 1
   resetVel: 1

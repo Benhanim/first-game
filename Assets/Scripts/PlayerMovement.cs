@@ -114,8 +114,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        grounded = Physics.CheckSphere(transform.position, playerHeight * 0.5f + 0.2f, whatIsGround);
-        //grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        // grounded = Physics.CheckSphere(transform.position, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();
@@ -221,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
                 desiredMoveSpeed = sprintSpeed;
         }
 
-        if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 7f && moveSpeed != 0)
+        if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 7f && moveSpeed != 0 && state != MovementState.dashing)
         {
             StopAllCoroutines();
             StartCoroutine(SmoothlyLerpMoveSpeed());

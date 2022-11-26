@@ -49,8 +49,10 @@ public class Dashing : MonoBehaviour
 
     private void Dash()
     {
-        if (dashCdTimer > 0) return;
-        else dashCdTimer = dashCd;
+        if (dashCdTimer > 0)
+            return;
+        else
+            dashCdTimer = dashCd;
 
         pm.dashing = true;
         pm.maxYSpeed = maxDashYSpeed;
@@ -63,7 +65,7 @@ public class Dashing : MonoBehaviour
             forwardT = playerCam;
         else
             forwardT = orientation;
-
+        
         Vector3 direction = GetDirection(forwardT);
 
         Vector3 forceToApply = direction * dashForce + orientation.up * dashUpwardForce;
