@@ -27,10 +27,12 @@ public class Dashing : MonoBehaviour
 
     [Header("Cooldown")]
     public float dashCd;
-    private float dashCdTimer;
+    public float dashCdTimer;
 
     [Header("Input")]
     public KeyCode dashKey = KeyCode.E;
+
+    public GameObject enemy;
 
     private void Start()
     {
@@ -114,5 +116,16 @@ public class Dashing : MonoBehaviour
             direction = forwardT.forward;
 
         return direction.normalized;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        enemy = collision.gameObject;
+
+        if (collision.gameObject.CompareTag("Enemy") && pm.dashing == true)
+        {
+            Destroy(enemy);
+            dashCdTimer = 0;
+        }
     }
 }

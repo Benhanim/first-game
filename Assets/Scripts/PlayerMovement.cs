@@ -224,6 +224,7 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 7f && moveSpeed != 0 && state != MovementState.dashing)
         {
             StopAllCoroutines();
+            moveSpeed = 25;
             StartCoroutine(SmoothlyLerpMoveSpeed());
         }
         else

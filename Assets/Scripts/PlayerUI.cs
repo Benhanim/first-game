@@ -4,14 +4,32 @@ using UnityEngine.SceneManagement;
 
 public class PlayerUI : MonoBehaviour
 {
-    [Header("Health and Damage")]
+    [Header("References")]
+    private Dashing ds;
+    private GameObject player;
+
+    [Header("Health, damage and cd dash")]
     public int health = 200;
     public TextMeshProUGUI txt;
 
     private void Start()
     {
+        player = GameObject.FindWithTag("Player");
+        ds = player.GetComponent<Dashing>();
         txt = gameObject.GetComponent<TextMeshProUGUI>();
-        txt.text = "Health: " + health.ToString();
+    }
+
+    private void Update()
+    {
+        if (ds.dashCdTimer > 0)
+        {
+            txt.text = "Cooldown: " + ds.dashCdTimer.ToString();
+        }
+        else
+        {
+            txt.text = "Cooldown: 0";
+        }
+        
     }
 
     public void LoseHealthSniper()
@@ -34,17 +52,5 @@ public class PlayerUI : MonoBehaviour
         {
             SceneManager.LoadScene("MainMenu");
         }
-    }
-
-    public void GainHealth()
-    {
-        health = health + 25;
-        txt.text = "Health: " + health.ToString();
-    }
-
-    public void Test()
-    {
-        health = health - 100;
-        txt.text = "Health: " + health.ToString();
     }
 }

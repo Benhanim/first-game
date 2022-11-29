@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public GameObject music;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
@@ -12,6 +14,7 @@ public class MainMenu : MonoBehaviour
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         SceneManager.LoadScene("GameScene1");
+        DontDestroyOnLoad(music);
     }
 
     public void QuitGame()

@@ -6,16 +6,28 @@ public class BulletPistol : MonoBehaviour
 {
     public PlayerUI pUI;
     public GameObject player;
+    private PlayerMovement pm;
+
+    private void Start()
+    {
+        player = GameObject.FindWithTag("Player");
+        pm = player.GetComponent<PlayerMovement>();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        player = collision.gameObject;
         pUI = player.GetComponent<PlayerUI>();
 
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && pm.dashing)
         {
-            pUI.LoseHealthPistol();
             Destroy(gameObject);
+            Debug.Log("Invicible while dashing");
+        }
+        else if (collision.gameObject.CompareTag("Player") && !pm.dashing)
+        {
+            Destroy(gameObject);
+            pUI.LoseHealthSniper();
+            Debug.Log("Get REKT");
         }
     }
 }
