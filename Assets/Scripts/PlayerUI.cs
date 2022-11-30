@@ -6,15 +6,17 @@ public class PlayerUI : MonoBehaviour
 {
     [Header("References")]
     private Dashing ds;
-    private GameObject player;
+    public GameObject player;
 
     [Header("Health, damage and cd dash")]
     public int health = 200;
     public TextMeshProUGUI txt;
 
+    public Transform spawn1, spawn2, spawn3, spawn4;
+
     private void Start()
     {
-        player = GameObject.FindWithTag("Player");
+        //player = GameObject.FindWithTag("Player");
         ds = player.GetComponent<Dashing>();
         txt = gameObject.GetComponent<TextMeshProUGUI>();
     }
@@ -37,20 +39,21 @@ public class PlayerUI : MonoBehaviour
         health = health - health;
         txt.text = "Health: " + health.ToString();
 
-        if (health <= 0)
+        if (health <= 0 && player.transform.position.z <= 285)
         {
-            SceneManager.LoadScene("MainMenu");
+            player.transform.position = spawn1.transform.position;
         }
-    }
-
-    public void LoseHealthPistol()
-    {
-        health = health - 100;
-        txt.text = "Health: " + health.ToString();
-
-        if (health <= 0)
+        else if (health <= 0 && player.transform.position.z <= 578)
         {
-            SceneManager.LoadScene("MainMenu");
+            player.transform.position = spawn2.transform.position;
+        }
+        else if (health <= 0 && player.transform.position.z <= 859)
+        {
+            player.transform.position = spawn3.transform.position;
+        }
+        else if (health <= 0 && player.transform.position.z >= 860)
+        {
+            player.transform.position = spawn4.transform.position;
         }
     }
 }

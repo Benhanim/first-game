@@ -1,25 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Music : MonoBehaviour
 {
+    public static Music music;
+
+    public Slider slider;
+
     public GameObject songSL, songSD, songZ;
-    //public AudioSource AsSL, AsSD, AsZ;
 
     public KeyCode songsKey = KeyCode.Q;
 
     public float musicVolume = 1f;
 
+    private void Awake()
+    {
+        if (music == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            music = this;
+        }
+        else if (music != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
+        musicVolume = PlayerPrefs.GetFloat("currentVolume", 1);
+        slider.value = musicVolume;
         StreetLove();
     }
+
     void Update()
     {
-        //AsSL.volume = musicVolume;
-        //AsSD.volume = musicVolume;
-        //AsZ.volume = musicVolume;
+        PlayerPrefs.SetFloat("currentVolume", musicVolume);
 
         songSL.GetComponent<AudioSource>().volume = musicVolume;
         songSD.GetComponent<AudioSource>().volume = musicVolume;
@@ -66,8 +82,8 @@ public class Music : MonoBehaviour
         songZ.SetActive(true);
     }
 
-    public void UpdateVolume(float volume)
+    public void UpdateVolume()
     {
-        musicVolume = volume;
+        musicVolume = slider.value;
     }
 }

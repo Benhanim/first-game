@@ -32,8 +32,6 @@ public class Dashing : MonoBehaviour
     [Header("Input")]
     public KeyCode dashKey = KeyCode.E;
 
-    public GameObject enemy;
-
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -120,11 +118,9 @@ public class Dashing : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        enemy = collision.gameObject;
-
         if (collision.gameObject.CompareTag("Enemy") && pm.dashing == true)
         {
-            Destroy(enemy);
+            Destroy(collision.gameObject);
             dashCdTimer = 0;
         }
     }

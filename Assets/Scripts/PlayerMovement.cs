@@ -57,9 +57,6 @@ public class PlayerMovement : MonoBehaviour
     public PlayerCam cam;
     public float grappleFov;
 
-    [Header("Go To Main Menu")]
-    public KeyCode mainMenuKey = KeyCode.M;
-
     [Header("Player UI")]
     private PlayerUI pu;
 
@@ -156,11 +153,6 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         }
-
-        if (Input.GetKey(mainMenuKey))
-        {
-            SceneManager.LoadScene("MainMenu");
-        }
     }
 
     private void StateHandler()
@@ -221,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
                 desiredMoveSpeed = sprintSpeed;
         }
 
-        if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 7f && moveSpeed != 0 && state != MovementState.dashing)
+        if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 7.5f && moveSpeed != 0 && state != MovementState.dashing)
         {
             StopAllCoroutines();
             moveSpeed = 25;
