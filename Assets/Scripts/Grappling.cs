@@ -65,8 +65,6 @@ public class Grappling : MonoBehaviour
 
             grapplePoint = hit.point;
 
-            Debug.Log("hola");
-
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
         }
         else
@@ -86,7 +84,6 @@ public class Grappling : MonoBehaviour
         {
             lr.enabled = true;
             lr.SetPosition(1, grapplePoint);
-            Debug.Log("skere");
         }
     }
 

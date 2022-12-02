@@ -4010,16 +4010,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'You are the heir to one of the biggest ninja clans in the world. Normal
-    people don''t know that ninjas in fact do exist and have superhuman abilities.
-    Although you are just getting started, you are in this simulation to train your
-    abilities and raise your level to be able to lead the clan.
-
-    In here, all
-    distractions are eliminated, just focus on climbing the building, and reaching
-    the top.
-
-    (Ninjas listen to music to not get bored).'
+  m_text: You are here in this simulation to train your Ninja skills. In this simulation
+    there are no distractions, just you, the environment, and your music. Just get
+    to the circle in the end of this passage. You can kill all the enemies, or none,
+    it's your choice.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}

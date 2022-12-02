@@ -7,6 +7,8 @@ public class Dashing : MonoBehaviour
     public Transform playerCam;
     private Rigidbody rb;
     private PlayerMovement pm;
+    private PauseMenu pMenu;
+    private GameObject goCam;
 
     [Header("Dashing")]
     public float dashForce;
@@ -36,6 +38,8 @@ public class Dashing : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
+        goCam = GameObject.FindWithTag("MainCamera");
+        pMenu = cam.GetComponent<PauseMenu>();
     }
 
     private void Update()
@@ -43,7 +47,7 @@ public class Dashing : MonoBehaviour
         if (Input.GetKeyDown(dashKey))
             Dash();
 
-        if (dashCdTimer > 0)
+        if (dashCdTimer > 0 && !pMenu.isPauseActive)
             dashCdTimer -= Time.deltaTime;
     }
 

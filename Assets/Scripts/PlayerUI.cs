@@ -1,24 +1,34 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerUI : MonoBehaviour
 {
     [Header("References")]
     private Dashing ds;
     public GameObject player;
-
-    [Header("Health, damage and cd dash")]
-    public int health = 200;
-    public TextMeshProUGUI txt;
-
     public Transform spawn1, spawn2, spawn3, spawn4;
+    private PauseMenu pm;
+    private VictoryMenu vm;
+    public GameObject cam;
+    public GameObject fObject;
+    private Finished fs;
+
+    [Header("Health, timer")]
+    public int health = 200;
+    public float timer, bestTime;
+    public TextMeshProUGUI txt;
+    public TextMeshProUGUI txt2;
 
     private void Start()
     {
-        //player = GameObject.FindWithTag("Player");
+        cam = GameObject.FindWithTag("MainCamera");
+        pm = cam.GetComponent<PauseMenu>();
+        vm = cam.GetComponent<VictoryMenu>();
+        fObject = GameObject.FindWithTag("Finished");
+        fs = fObject.GetComponent<Finished>();
         ds = player.GetComponent<Dashing>();
         txt = gameObject.GetComponent<TextMeshProUGUI>();
+        txt2.text = timer.ToString();
     }
 
     private void Update()
@@ -31,7 +41,19 @@ public class PlayerUI : MonoBehaviour
         {
             txt.text = "Cooldown: 0";
         }
-        
+
+        if (!pm.isPauseActive && !vm.isVictory)
+        {
+            timer += Time.deltaTime;
+            bestTime = timer;
+            txt2.text = "Time: " + timer.ToString("F2");
+        }
+
+        if (fs.touched)
+        {
+            PlayerPrefs.SetFloat("bestTime", bestTime);
+            PlayerPrefs.Save();
+        }
     }
 
     public void LoseHealthSniper()
